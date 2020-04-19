@@ -9,15 +9,12 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    @yield('page-style-files')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -72,9 +69,13 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <div class="wrapper">
             @yield('content')
-        </main>
+        </div>
     </div>
 </body>
+
+@yield('page-js-files')
+@yield('page-js-script')
+
 </html>
