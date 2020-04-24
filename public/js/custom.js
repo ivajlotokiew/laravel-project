@@ -25,7 +25,7 @@ function productBadge(product) {
     let $threeDotsWrap = $('<div>', {'class': 'img-wrapper'})
         .append($('<img/>', {
             'class': 'edit-product-img',
-            'src': '',
+            'src': assetBaseUrl + "images/three-dots.png",
             'alt': 'Edit product'
         })).append($productActionsWrap);
 
@@ -164,10 +164,10 @@ class Product {
 
     static getProduct(productId) {
         return $.ajax({
-            url: ajax_object.ajaxurl,
+            url: ajaxGetProductRoute,
             type: 'POST',
             dataType: 'Json',
-            data: {'action': 'get_product', 'id': productId, _ajax_nonce: ajax_object.nonce}
+            data: {'id': productId, '_token': csrfToken}
         });
     }
 }
@@ -201,6 +201,11 @@ class Category {
         return "category_name"
     }
 
+    /**
+     *
+     * @param obj
+     * @returns {Category}
+     */
     static bindCategoryObject(obj) {
         let category = new Category();
         category.id = typeof obj[Category.getNameId()] !== undefined ? obj[Category.getNameId()] : null;

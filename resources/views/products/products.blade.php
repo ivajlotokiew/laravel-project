@@ -24,14 +24,17 @@
 @stop
 
 @section('page-js-files')
-    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/jquery-3.5.0.min.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/bootbox.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
 @stop
 
 @section('page-js-script')
     <script type="text/javascript">
-
+        let assetBaseUrl = "{{ asset('') }}";
+        let ajaxGetProductRoute = "{{ route('ajaxGetProduct.post') }}";
+        let csrfToken = '{{ csrf_token() }}';
         let editedProducts = {};
         let categories = <?= json_encode($categories); ?>;
         let products = <?= json_encode($products); ?>;
@@ -70,9 +73,10 @@
 
             $productsContainer.on('mouseenter', '.img-wrapper', function () {
                 $(this).find('.actions-wrapper').show();
-            }).on('mouseleave', '.img-wrapper', function () {
-                $(this).find('.actions-wrapper').hide();
-            });
+            }).on(
+                'mouseleave', '.img-wrapper', function () {
+                    $(this).find('.actions-wrapper').hide();
+                });
 
             $productsContainer.on('click', '.delete-product', function () {
                 let productId = $(this).data("product-id");
@@ -83,19 +87,14 @@
                 let offset = ajaxDataObj.offset;
                 let length = ajaxDataObj.length;
                 promise = $.ajax({
-                    url: ajax_object.ajaxurl,
-                    type: 'POST',
-                    dataType: 'Json',
+                    url: "{{ route('ajaxProducts.post') }}",
+                    method: 'POST',
                     data: {
-                        'action': 'get_all_products',
                         'offset': offset,
                         'length': length,
-                        _ajax_nonce: ajax_object.nonce
+                        '_token': '{{ csrf_token() }}'
                     },
                     success: function (products) {
-                        console.log('products');
-                        console.log(products);
-
                         if (products.constructor === Array && products.length > 0) {
                             ajaxCompleted = true;
                             renderProducts(products);
@@ -129,8 +128,7 @@
                     console.error("There are no products to edit.")
                 }
             })
-        })
-        ;
+        });
 
         function renderProducts(products) {
             for (let key in products) {
@@ -207,8 +205,6 @@
         function getProduct(productId) {
             let getProduct = Product.getProduct(productId);
             getProduct.then((response) => {
-                    console.log('response');
-                    console.log(response);
                     let product = Product.bindProductObject(response);
                     formEditProduct(product);
                 },
@@ -263,10 +259,12 @@
 
         function deleteProduct(productId) {
             $.ajax({
-                url: ajax_object.ajaxurl,
-                type: 'POST',
-                dataType: 'Json',
-                data: {action: 'delete_product', 'id': productId, _ajax_nonce: ajax_object.nonce},
+                url: "{{ route('ajaxDeleteProduct.post') }}",
+                method: 'POST',
+                data: {
+                    'id': productId,
+                    '_token': '{{ csrf_token() }}'
+                },
                 success: function (response) {
                     let currentBadge = $(".product-container[data-product-id='" + productId + "']");
                     if (currentBadge.length > 0) {

@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
+
 
 use App\Category;
+use App\Http\Controllers\Controller;
+use App\Product;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+
+class AdminController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -15,7 +19,6 @@ class CategoryController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-//        $this->middleware(['role:super-admin']);
     }
 
     /**
@@ -23,18 +26,24 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        return view('admin.index');
+    }
+
+    public function getCategories()
+    {
         $categories = Category::all();
 
-        return view('categories.index', ['categories' => $categories]);
+        return view('admin.editCategories', ['categories' => $categories]);
     }
 
     /**
-     * @param $category_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function category($category_id)
+    public function getProducts()
     {
-        $category = Category::findOrFail($category_id);
-        return view('categories.category', ['category' => $category]);
+        $products = Product::all();
+        $categories = Category::all();
+
+        return view('admin.editProducts', compact('products', 'categories'));
     }
 }
