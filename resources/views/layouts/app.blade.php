@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Online shop</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 @yield('page-style-files')
 
@@ -81,7 +82,7 @@
             <div class="element-container pull-left" style="display: flex;align-items: center;">
                 <div class="pull-left">
                     <a href="/"><img alt="test logo"
-                                     src="https://www.test.local/wp-content/uploads/2020/03/main-logo.png"
+                                     src="/images/main-logo.png"
                                      style="width: 100px;">
                     </a>
                 </div>
@@ -104,7 +105,6 @@
     </footer>
 
 </div>
-
 </body>
 
 @yield('page-js-files')

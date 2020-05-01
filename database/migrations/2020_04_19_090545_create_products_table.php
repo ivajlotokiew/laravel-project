@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->timestamp('modified_at')->nullable();
             $table->foreign('category_id')->references('id')->on('categories');

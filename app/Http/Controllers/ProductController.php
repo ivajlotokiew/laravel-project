@@ -40,7 +40,7 @@ class ProductController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ajaxPostGerProducts(Request $request)
+    public function ajaxPostGetProducts(Request $request)
     {
         $params = [];
         $params['offset'] = $request['offset'];
@@ -67,6 +67,7 @@ class ProductController extends Controller
         try {
             $product = Product::find($request[888]);
             $product->delete();
+
             return response()->json(['Success' => 'Product was successfully deleted!']);
         } catch (\Exception $ex) {
             return response()->json(['Error' => 'Something goes wrong!'], 500);

@@ -38,5 +38,6 @@
         $(window).on('load', function () {
 
         });
+
     </script>
 @stop

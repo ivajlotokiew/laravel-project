@@ -29,12 +29,25 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param $category_id
+     * @param Category $category
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function category($category_id)
+    public function category(Category $category)
     {
-        $category = Category::findOrFail($category_id);
-        return view('categories.category', ['category' => $category]);
+        return view('categories.category', compact('category'));
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ajaxPostCategories(Request $request) {
+        $categories = Category::all();
+        if (!$categories) {
+            return response()->json(['Error' => 'Something goes wrong!'], 404);
+        }
+
+        return response()->json($categories);
+    }
+
 }

@@ -7,7 +7,6 @@ html, body {
     margin: 0;
 }
 
-
 .full-height {
     height: 100vh;
 }
@@ -191,4 +190,34 @@ footer#colophon {
     padding-bottom: 0;
     background: #8c8c8c;
     height: 120px;
+}
+
+.error-field {
+    display: none;
+    color: #e3342f;
+}
+
+.form-group > img#prev-img {
+    display: none;
+    height: 150px;
+    width: 150px;
+    margin-right: 10px;
+}
+
+div.img-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+label[for=product-img] {
+    display: inline;
+}
+
+div.product-created {
+    display: none;
+    color: #51d051;
+    font-size: 18px;
+    font-weight: 600;
 }
