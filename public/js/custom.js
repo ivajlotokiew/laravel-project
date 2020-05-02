@@ -4,7 +4,14 @@
  * @returns {*}
  */
 function productBadge(product) {
-    let $mainWrap = $('<div>', {'class': 'product-container', 'data-product-id': product.id});
+    console.log(product);
+    let $mainWrap = $('<div>', {'class': 'product-container', 'data-product-id': product.id}).append(
+        $('<img/>', {
+            'class': 'thumbnail-img',
+            'src': `${product.url}`,
+            'alt': 'thumbnail image'
+        })
+    );
     let $secondWrap = $('<div>', {'class': 'product-info-wrapper'});
     let $productWrap = $('<div>', {'class': 'product-title', text: product.name});
     let $additionalInfoWrap = $('<div>', {'class': 'additional-info'});
@@ -109,6 +116,14 @@ class Product {
         this._isEdited = val;
     }
 
+    get url() {
+        return this._url;
+    }
+
+    set url(val) {
+        this._url = val;
+    }
+
     static getNameId() {
         return "id";
     }
@@ -129,6 +144,10 @@ class Product {
         return "price";
     }
 
+    static getNameImgUrl() {
+        return 'img_url';
+    }
+
     static getNameStatus() {
         return "status";
     }
@@ -142,6 +161,7 @@ class Product {
         product.created = typeof obj[Product.getNameCreated()] !== undefined ? obj[Product.getNameCreated()] : null;
         product.description = typeof obj[Product.getNameDescription()] !== undefined ? obj[Product.getNameDescription()] : null;
         product.price = typeof obj[Product.getNamePrice()] !== undefined ? obj[Product.getNamePrice()] : null;
+        product.url = typeof obj[Product.getNameImgUrl()] !== undefined ? obj[Product.getNameImgUrl()] : null;
 
         return product;
     }

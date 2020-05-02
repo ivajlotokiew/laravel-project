@@ -12,12 +12,6 @@
             </div>
 
         </div>
-        <div id="bottom-position" class="form-group">
-            <label for="eProducts">
-                <input type="button" class="btn button-primary pull-right" name="name" id="eProducts"
-                       value="Apply changes"/>
-            </label>
-        </div>
     </div>
 @endsection
 
@@ -39,8 +33,10 @@
         let ajaxGetProductRoute = "{{ route('ajaxGetProduct.post') }}";
         let csrfToken = '{{ csrf_token() }}';
         let editedProducts = {};
-        let categories = <?= json_encode($categories); ?>;
-        let products = <?= json_encode($products); ?>;
+        var categoriesData = '<?php echo json_encode($categories); ?>';
+        var categories = JSON.parse(categoriesData);
+        var productsData = '<?php echo json_encode($products); ?>';
+        var products = JSON.parse(productsData);
         let $productsContainer = $('.products-container');
         let $productsWrapper = $('.products-wrapper');
         let promise;
@@ -50,8 +46,8 @@
             'offset': 0,
             'length': 8
         };
-        let ajaxCompleted = true;
 
+        let ajaxCompleted = true;
         $(window).on('load', function () {
             renderProducts(products);
             $productsContainer.scroll(function () {
@@ -123,14 +119,14 @@
                 scrollBottom();
             });
 
-            $("#eProducts").on("click", function () {
-                if (!(Object.keys(editedProducts).length === 0 && editedProducts.constructor === Object)) {
-                    editProducts(editedProducts);
-                } else {
-                    alert("Check console for more info.");
-                    console.error("There are no products to edit.")
-                }
-            })
+            // $("#eProducts").on("click", function () {
+            //     if (!(Object.keys(editedProducts).length === 0 && editedProducts.constructor === Object)) {
+            //         editProducts(editedProducts);
+            //     } else {
+            //         alert("Check console for more info.");
+            //         console.error("There are no products to edit.")
+            //     }
+            // })
         });
 
         function renderProducts(products) {
@@ -150,7 +146,16 @@
          * @param {Product} product
          */
         function formEditProduct(product) {
-            let editForm = `<form id = "edit-form">
+            let editForm = `<div class="form-container">
+                   <form id="edit-form" enctype="multipart/form-data">
+                    <div class="form-group img-container">
+                      <div class="img-file-wrapper">
+                         <img src="${product.url}" alt="Product image" height="120" width="120">
+                         <label for="product-img" class="">Change Image</label>
+                         <input id="product-img" type="file" class="form-control" name="product_image" value="">
+                      </div>
+                      <img id="prev-img" src="#" alt="product image" />
+                    </div>
                     <div class = "form-group>
                     <label for = "pName"> Product: </label>
                               <input type = "text" name = "name" id = "pName"  class = "form-control" value = "${product.name}" > <br>
@@ -171,7 +176,7 @@
                 }
             }
 
-            editForm += ` < /select></div > < /form>`;
+            editForm += ` </select></div></form></div>`;
 
             let dialog = bootbox.dialog({
                 title: 'Edit product',
@@ -190,12 +195,38 @@
                         className: 'btn-info',
                         callback: function () {
                             let category_name = $("#category_name :selected").text();
-                            let data = $("#edit-form").serializeArray();
-                            data.push({name: "category_name", value: category_name});
-                            let product = objectifyForm(data);
-                            let editedProduct = Product.bindProductObject(product);
-                            editedProduct.status = true;
-                            storeEditedProducts(editedProduct);
+                            let form = $('#edit-form')[0];
+                            let form_data = new FormData(form);
+                            let file_data = jQuery('#product-img').prop('files')[0];
+                            form_data.append('category_name', category_name);
+                            form_data.append('product_image', file_data);
+                            form_data.append('_token', '{{csrf_token()}}');
+                            $.ajax({
+                                url: "{{ route('ajaxUpdateProduct.post') }}",
+                                method: 'POST',
+                                data: form_data,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                success: function (response) {
+                                    let ajaxDataProduct = response['product'];
+                                    let $currentProduct =
+                                        $('div.product-container[data-product-id="' + form_data.get('id') + '"]');
+
+                                    $currentProduct.find('div.product-title').text(ajaxDataProduct.name);
+                                    $currentProduct.find('span.product-price').text(ajaxDataProduct.price + 'Eur');
+
+                                },
+                                error: function (xhr, status, data) {
+                                    if (xhr.status === 422) {
+                                        let errors = xhr.responseJSON.errors;
+                                        $.each(errors, function (key, val) {
+                                            console.log(key + ' => ' + val);
+                                            $('.modal-body').find('span.' + key).show();
+                                        });
+                                    }
+                                }
+                            });
                             renderProducts();
                         }
                     }
@@ -208,7 +239,8 @@
         function getProduct(productId) {
             let getProduct = Product.getProduct(productId);
             getProduct.then((response) => {
-                    let product = Product.bindProductObject(response);
+                    let responseObj = response[0];
+                    let product = Product.bindProductObject(responseObj);
                     formEditProduct(product);
                 },
                 (err) => {
@@ -222,20 +254,20 @@
             $bottomElm.scrollIntoView({block: 'start', behavior: 'smooth'});
         }
 
-        function objectifyForm(formArray) {//serialize data function
-            let returnArray = {};
-            for (let i = 0; i < formArray.length; i++) {
-                returnArray[formArray[i]['name']] = formArray[i]['value'];
-            }
+        // function objectifyForm(formArray) {//serialize data function
+        //     let returnArray = {};
+        //     for (let i = 0; i < formArray.length; i++) {
+        //         returnArray[formArray[i]['name']] = formArray[i]['value'];
+        //     }
+        //
+        //     return returnArray;
+        // }
 
-            return returnArray;
-        }
-
-        function storeEditedProducts(editedProduct) {
-            if (!editedProducts.hasOwnProperty(editedProducts.id)) {
-                editedProducts[editedProduct.id] = editedProduct;
-            }
-        }
+        // function storeEditedProducts(editedProduct) {
+        //     if (!editedProducts.hasOwnProperty(editedProducts.id)) {
+        //         editedProducts[editedProduct.id] = editedProduct;
+        //     }
+        // }
 
         /**
          *

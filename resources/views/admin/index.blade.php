@@ -26,7 +26,6 @@
         let $body = $('body');
         $(window).on('load', function () {
 
-
             $body.on('click', '.cProduct', function () {
                 $.ajax({
                     url: "{{ route('ajaxCategories.post') }}",

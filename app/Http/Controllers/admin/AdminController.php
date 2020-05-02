@@ -45,7 +45,8 @@ class AdminController extends Controller
      */
     public function getProducts()
     {
-        $products = Product::all();
+        $products = Product::all(['products.id as id', 'products.category_id', 'products.name as name', 'products.price', 'products.description',
+            'products.created_at as created', 'products.product_image as img_url']);
         $categories = Category::all();
 
         return view('admin.editProducts', compact('products', 'categories'));
@@ -85,22 +86,34 @@ class AdminController extends Controller
         return response()->json(['Success' => 'Product was successfully created!']);
     }
 
-    public function updateProduct(Request $request)
+    public function ajaxPostUpdateProduct(Request $request)
     {
-        // Form validation
         $request->validate([
-            'product_image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'name' => 'required|min:2|max:255',
+            'description' => 'nullable|min:5',
+            'price' => 'required|numeric',
+            'product_image' => $request['product_image'] !== 'undefined' ? 'mimes:jpeg,bmp,png' : '',
         ]);
 
-        // Get current user
-        $product = Product::findOrFail('5');
+        $product = Product::find($request['id']);
 
-        // Check if a product image has been uploaded
-        if ($request->has('product_image')) {
+        if ($product->name !== $request['name']) {
+            $product->name = $request['name'];
+        }
+
+        if ($product->description !== $request['description']) {
+            $product->description = $request['description'];
+        }
+
+        if ($product->price !== $request['price']) {
+            $product->price = $request['price'];
+        }
+
+        if ($request->has('product_image') && $request['product_image'] !== 'undefined') {
             // Get image file
             $image = $request->file('product_image');
             // Make a image name based on user name and current timestamp
-            $name = Str::slug($product->name . '_' . time());
+            $name = Str::slug($product['name'] . '_' . time());
             // Define folder path
             $folder = '/uploads/images/';
             // Make a file path where image will be stored [ folder path + file name + file extension]
@@ -110,10 +123,10 @@ class AdminController extends Controller
             // Set user product image path in database to filePath
             $product->product_image = $filePath;
         }
-        // Persist user record to database
-        $product->save();
 
-        // Return user back and show a flash message
-        return view('admin.index', ['success' => 'Image uploaded']);
+        $category = Category::find($request['category_id']);
+        $category->products()->save($product);
+
+        return response()->json(['Success' => 'Product was successfully created!', 'product' => $product]);
     }
 }

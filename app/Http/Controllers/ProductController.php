@@ -84,8 +84,9 @@ class ProductController extends Controller
             $product = \DB::table('products')
                 ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->select('products.id as id', 'products.name as name', 'products.price', 'products.description',
-                    'products.created_at as created', 'categories.id as category_id', 'categories.name as category_name')
-                ->get()->first();
+                    'products.created_at as created', 'products.product_image as img_url',  'categories.id as category_id', 'categories.name as category_name')
+                ->where('products.id',$request['id'])
+                ->get();
 
             return response()->json($product);
         } catch (\Exception $ex) {
@@ -98,13 +99,13 @@ class ProductController extends Controller
         try {
             $products = \DB::table('products')
                 ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->select('products.id as id', 'products.name as name', 'products.price', 'categories.id as category_id',
-                    'categories.name as category_name')
+                ->select('products.id as id', 'products.name as name', 'products.price', 'products.product_image as img_url',
+                    'categories.id as category_id', 'categories.name as category_name')
                 ->offset($params['offset'])
                 ->limit($params['length'])
                 ->get();
 
-            return $products;
+            response()->json($products);
         } catch (\Exception $ex) {
             dd($ex->getMessage());
             return false;

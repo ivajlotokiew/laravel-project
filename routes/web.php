@@ -30,6 +30,7 @@ Route::group(['middleware' => ['role:super-admin']], function () {
 });
 
 Route::post('ajaxCreateProduct', 'admin\AdminController@ajaxPostCreateProduct')->name('ajaxCreateProduct.post');
+Route::post('ajaxUpdateProduct', 'admin\AdminController@ajaxPostUpdateProduct')->name('ajaxUpdateProduct.post');
 
 
 Route::post('ajaxProducts', 'ProductController@ajaxPostGetProducts')->name('ajaxProducts.post');
@@ -38,5 +39,4 @@ Route::post('ajaxGetProduct', 'ProductController@ajaxPostGetProduct')->name('aja
 
 Route::post('ajaxCategories', 'CategoryController@ajaxPostCategories')->name('ajaxCategories.post');
 
-Route::post('/admin', 'admin\AdminController@updateProduct')->name('product.update');
 
