@@ -65,7 +65,7 @@ class ProductController extends Controller
         }
 
         try {
-            $product = Product::find($request[888]);
+            $product = Product::find($request['id']);
             $product->delete();
 
             return response()->json(['Success' => 'Product was successfully deleted!']);

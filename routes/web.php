@@ -39,4 +39,6 @@ Route::post('ajaxGetProduct', 'ProductController@ajaxPostGetProduct')->name('aja
 
 Route::post('ajaxCategories', 'CategoryController@ajaxPostCategories')->name('ajaxCategories.post');
 
+Route::post('ajaxUpdateCategory', 'CategoryController@ajaxPostUpdateCategory')->name('ajaxUpdateCategory.post');
+
 

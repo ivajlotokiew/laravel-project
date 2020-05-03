@@ -5,7 +5,7 @@
         <h1>This is admin page for editing shop articles</h1>
         <div><a href="admin/editCategories"><h2>Edit categories</h2></a></div>
         <div><a href="admin/editProducts"><h2>Edit products</h2></a></div>
-        <div><a href="#" class="cProduct"><h2>Create product</h2></a></div>
+        <div><a href="#" class="cProduct"><h2>Add product</h2></a></div>
     </div>
 @endsection
 

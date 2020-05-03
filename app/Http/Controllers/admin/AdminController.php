@@ -45,8 +45,12 @@ class AdminController extends Controller
      */
     public function getProducts()
     {
-        $products = Product::all(['products.id as id', 'products.category_id', 'products.name as name', 'products.price', 'products.description',
-            'products.created_at as created', 'products.product_image as img_url']);
+        $products = \DB::table('products')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.id as id', 'products.name as name', 'products.price', 'products.product_image as img_url',
+                'categories.id as category_id', 'categories.name as category_name')
+            ->get();
+
         $categories = Category::all();
 
         return view('admin.editProducts', compact('products', 'categories'));

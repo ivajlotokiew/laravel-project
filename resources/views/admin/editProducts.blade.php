@@ -40,7 +40,7 @@
         let $productsContainer = $('.products-container');
         let $productsWrapper = $('.products-wrapper');
         let promise;
-        let $body = $("<body>");
+        let $body = $('body');
         let ajaxDataObj = {
             'action': 'get_all_products',
             'offset': 0,
@@ -150,7 +150,7 @@
                    <form id="edit-form" enctype="multipart/form-data">
                     <div class="form-group img-container">
                       <div class="img-file-wrapper">
-                         <img src="${product.url}" alt="Product image" height="120" width="120">
+                         <img id="current-img" src="${product.url}" alt="Product image" height="120" width="120">
                          <label for="product-img" class="">Change Image</label>
                          <input id="product-img" type="file" class="form-control" name="product_image" value="">
                       </div>
@@ -214,7 +214,9 @@
                                         $('div.product-container[data-product-id="' + form_data.get('id') + '"]');
 
                                     $currentProduct.find('div.product-title').text(ajaxDataProduct.name);
-                                    $currentProduct.find('span.product-price').text(ajaxDataProduct.price + 'Eur');
+                                    $currentProduct.find('span.product-price').text(ajaxDataProduct.price + 'Eur | ');
+                                    let category = categories.find(x => x.id === ajaxDataProduct.category_id);
+                                    $currentProduct.find('span.product-category').text(category.name);
 
                                 },
                                 error: function (xhr, status, data) {
@@ -312,6 +314,24 @@
                 }
             });
         }
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#prev-img').attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+                $('#current-img').hide();
+                $('#prev-img').show();
+            }
+        }
+
+        $body.on('change', "#product-img", function () {
+            readURL(this);
+        });
 
     </script>
 @stop

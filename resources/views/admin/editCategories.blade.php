@@ -7,21 +7,20 @@
         </span>
         @foreach($categories as $category)
             <article class="category-miniature col-lg-4 col-md-6 col-sm-6 col-xs-12"
-                     data-id-category="{{$category->id}}">
+                     data-category-id="{{$category->id}}">
                 <div class="category-container">
                     <div class="category-image">
-                        <a href="/categories/{{$category->id}}"
-                           class="thumbnail category-thumbnail">
-                            <img class="img_1" src={{asset("images/category_" . $category->id . ".jpg") }} alt="">
-                        </a>
+                        <img class="img_1" data-src="{{$category->category_image}}"
+                             src={{$category->category_image}} alt="">
                     </div>
                     <div class="category-info">
-                        <h5 class="category-title" itemprop="name"><a href="">{{$category->name}}</a></h5>
+                        <h5 class="category-title" itemprop="name">{{$category->name}}</h5>
                     </div>
                 </div>
             </article>
         @endforeach
     </div>
+
 @endsection
 
 @section('page-style-files')
@@ -38,8 +37,93 @@
 
 @section('page-js-script')
     <script type="text/javascript">
+        let $body = $('body');
         $(window).on('load', function () {
+            $body.on('click', '.category-miniature', function () {
+                editCategory(this);
+            });
 
+            function editCategory(input) {
+                let categoryName = jQuery(input).find('.category-title').text();
+                let $categoryId = jQuery(input).data('category-id');
+                let categoryImage = jQuery(input).find('.category-image > img').data('src');
+                let categoryForm = `
+                    <div class="category-container">
+                        <form id="category-form">
+                            <div class="form-group">
+                                <div>
+                                    <img id="cat-prev-img" src="${categoryImage}" alt="category image">
+                                </div>
+                                <label for="cFile">Select a file:</label>
+                                <input type="file" class="form-control" id="cFile" name="category_image">
+                            </div>
+                            <div class="form-group">
+                                <label for="cName">Category</label>
+                                <input type="text" name="name" class="form-control" id="cName" value="${categoryName}"><br>
+                            </div>
+                        </form>
+                    </div>
+                `;
+
+                bootbox.dialog({
+                    title: 'Custom Dialog Example',
+                    message: categoryForm,
+                    size: 'large',
+                    onEscape: true,
+                    backdrop: true,
+                    buttons: {
+                        Cancel: {
+                            label: 'Cancel',
+                            className: 'btn-danger',
+                            callback: function () {
+                            }
+                        },
+                        Update: {
+                            label: 'Update',
+                            className: 'btn-primary',
+                            callback: function () {
+                                let $form = $("#category-form")[0];
+                                let formData = new FormData($form);
+                                formData.append('id', $categoryId);
+                                formData.append('image', $('input[type=file]')[0].files[0]);
+                                formData.append('_token', '{{csrf_token()}}');
+                                $.ajax({
+                                    url: '{{route("ajaxUpdateCategory.post")}}',
+                                    method: 'POST',
+                                    data: formData,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function (response) {
+
+                                    }, error: function (error) {
+
+                                    }
+                                });
+
+                                return false;
+
+                            }
+                        }
+                    }
+                })
+            }
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    let reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#cat-prev-img').attr('src', e.target.result);
+                    };
+
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
+            }
+
+            $body.on('change', "#cFile", function () {
+                readURL(this);
+            });
         });
     </script>
 @stop
