@@ -7,6 +7,10 @@ html, body {
     margin: 0;
 }
 
+#app .container > a {
+    font-size: 28px;
+}
+
 .full-height {
     height: 100vh;
 }
@@ -53,19 +57,33 @@ html, body {
     font-size: 34px;
 }
 
-.product-container {
+.product-container, .product-container-vertical {
     display: flex;
     /*justify-content: space-between;*/
     border-radius: 5px;
-    background: rgb(238, 228, 202);
-    height: 80px;
     margin-bottom: 5px;
-    padding-top: 5px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
+
+.products-container {
+    height: 80px;
+    background: rgb(234, 235, 239);
+}
+
+.product-container {
+    height: 80px;
+    background: rgb(230, 220, 195);
+}
+
+.product-container-vertical {
+    flex-direction: column;
 }
 
 .product-container:hover {
-    background: rgb(230, 220, 195);;
+    background: rgb(230, 220, 195);
 }
+
 
 div.wrapper {
     margin-top: 30px;
@@ -164,13 +182,28 @@ img.edit-product-img {
     margin-left: 15%;
 }
 
-.category-miniature {
+.category-miniature, .product-miniature {
     float: left;
-    width: 33.33333%;
+    width: 33.333%;
     margin-bottom: 25px;
 }
 
-.category-image {
+.product-miniature {
+    width: 24%;
+    height: 370px;
+    margin: 5px 5px 10px;
+    padding-right: 0;
+    padding-left: 0;
+    background: rgb(255, 255, 255);
+    border: 1px solid #d4d4d4;
+    border-radius: 7px;
+}
+
+.product-miniature:hover {
+    box-shadow: 0px 0px 16px 0px #a9a9a9;
+}
+
+.category-image, .product-image {
     border: solid 1px #e5e5e5;
     border-radius: 5px;
     overflow: hidden;
@@ -178,10 +211,20 @@ img.edit-product-img {
     padding: 5px;
 }
 
-.img_1 {
+.img_1, .p-image {
     vertical-align: middle;
-    height: 200px;
     width: 100%;
+}
+
+.p-image {
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 227px;
+    cursor: pointer;
+}
+
+.img_1 {
+    height: 200px;
 }
 
 footer#colophon {
@@ -249,7 +292,53 @@ img.thumbnail-img {
     margin-top: 8px;
 }
 
-
 .category-miniature {
     cursor: pointer;
+}
+
+.product-info {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.product-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: #b53904;
+}
+
+.product-badge-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.single-product-container {
+    display: flex;
+}
+
+.single-product-container > .product-info {
+    text-align: left;
+}
+
+.product-description {
+    margin-left: 15px;
+}
+
+.single-product-container .product-title {
+    font-size: 35px;
+}
+
+.product-image > .single-product-img {
+    width: 256px;
+    height: 256px;
+}
+
+.breadcrumb {
+    font-size: 17px;
+}
+
+.products-wrapper {
+    overflow: auto;
 }

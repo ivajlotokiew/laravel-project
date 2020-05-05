@@ -16,12 +16,15 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Auth::routes();
 
-Route::get('/categories', 'CategoryController@index');
-Route::get('/categories/{category}', 'CategoryController@category');
+Route::get('/products', 'ProductController@index')->name('products');
+Route::get('/products/{product}', 'ProductController@getProduct')->name('product');
+
+Route::get('/categories', ['as' => 'categories', 'uses' => 'CategoryController@index']);
+Route::get('/categories/{category}', ['as' => 'category', 'uses' => 'CategoryController@getProductsCategory']);
 
 Route::group(['middleware' => ['role:super-admin']], function () {
     Route::get('/admin', 'admin\AdminController@index');
@@ -38,7 +41,6 @@ Route::post('ajaxDeleteProduct', 'ProductController@ajaxPostDeleteProduct')->nam
 Route::post('ajaxGetProduct', 'ProductController@ajaxPostGetProduct')->name('ajaxGetProduct.post');
 
 Route::post('ajaxCategories', 'CategoryController@ajaxPostCategories')->name('ajaxCategories.post');
+Route::post('ajaxProductsCategory', 'CategoryController@ajaxPostProductsCategory')->name('ajaxProductsCategory.post');
 
 Route::post('ajaxUpdateCategory', 'CategoryController@ajaxPostUpdateCategory')->name('ajaxUpdateCategory.post');
-
-

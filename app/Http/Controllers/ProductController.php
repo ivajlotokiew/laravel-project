@@ -25,16 +25,26 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $params = [];
-        $params['offset'] = 0;
-        $params['length'] = 8;
-
-        $products = $this->getProducts($params);
-        $categories = $this->getCategories();
-
-        return view('home', compact('products', 'categories'));
+        $products = Product::all(['products.id as id', 'products.name as name', 'products.price', 'products.product_image as img_url',
+            'products.category_id']);
+        return view('products.index', compact('products'));
     }
 
+    /**
+     * @param $productId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getProduct($productId)
+    {
+        $product = \DB::table('products')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.id as id', 'products.name as name', 'products.price', 'products.product_image as img_url',
+                'categories.id as category_id', 'categories.name as category_name')
+            ->where('products.id', $productId)
+            ->get()->first();
+
+        return view('products.product', compact('product'));
+    }
 
     /**
      * @param Request $request
@@ -84,8 +94,8 @@ class ProductController extends Controller
             $product = \DB::table('products')
                 ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->select('products.id as id', 'products.name as name', 'products.price', 'products.description',
-                    'products.created_at as created', 'products.product_image as img_url',  'categories.id as category_id', 'categories.name as category_name')
-                ->where('products.id',$request['id'])
+                    'products.created_at as created', 'products.product_image as img_url', 'categories.id as category_id', 'categories.name as category_name')
+                ->where('products.id', $request['id'])
                 ->get();
 
             return response()->json($product);
@@ -105,9 +115,8 @@ class ProductController extends Controller
                 ->limit($params['length'])
                 ->get();
 
-            response()->json($products);
+            return $products;
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
             return false;
         }
     }
@@ -120,4 +129,9 @@ class ProductController extends Controller
         $categories = Category::all();
         return $categories;
     }
+
+//    public function product($name){
+//        $product = Product::where('name', $name)->first();
+//        return view('product', compact('product'));
+//    }
 }

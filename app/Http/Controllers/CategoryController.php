@@ -29,23 +29,49 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
 
-        return view('categories.index', ['categories' => $categories]);
+        return view('categories.index', compact('categories'));
     }
 
     /**
-     * @param Category $category
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param $categoryId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function category(Category $category)
+    public function getProductsCategory($categoryId)
     {
-        return view('categories.category', compact('category'));
+        $params = [];
+        $params['offset'] = 0;
+        $params['limit'] = 8;
+        $params['category_id'] = $categoryId;
+        $products = $this->getProducts($params);
+
+        if (!$products) {
+            return response()->json(['Error' => 'Something goes wrong!'], 500);
+        }
+
+        return view('categories.category', compact('products'));
+    }
+
+    public function ajaxPostProductsCategory(Request $request)
+    {
+        $params = [];
+        $params['offset'] = $request['offset'];
+        $params['limit'] = $request['limit'];
+        $params['category_id'] = $request['category_id'];
+        $products = $this->getProducts($params);
+
+        if (!$products) {
+            return response()->json(['Error' => 'Something goes wrong!'], 500);
+        }
+
+        return response()->json($products);
     }
 
     /**
-     * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ajaxPostCategories(Request $request) {
+    public function ajaxPostCategories()
+    {
         $categories = Category::all();
         if (!$categories) {
             return response()->json(['Error' => 'Something goes wrong!'], 404);
@@ -54,7 +80,8 @@ class CategoryController extends Controller
         return response()->json($categories);
     }
 
-    public function ajaxPostUpdateCategory(Request $request) {
+    public function ajaxPostUpdateCategory(Request $request)
+    {
         $request->validate([
             'name' => 'required|min:2|max:255',
             'category_image' => $request['category_image'] !== 'undefined' ? 'mimes:jpeg,bmp,png' : '',
@@ -86,4 +113,21 @@ class CategoryController extends Controller
         return response()->json(['Success' => 'Category was successfully created!', 'category' => $category]);
     }
 
+    private function getProducts($params)
+    {
+        try {
+            $products = \DB::table('products')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->select('products.id as id', 'products.name as name', 'products.price', 'products.description',
+                    'products.created_at as created', 'products.product_image as img_url', 'categories.id as category_id',
+                    'categories.name as category_name')
+                ->where('categories.id', $params['category_id'])
+                ->offset($params['offset'])
+                ->limit($params['limit'])
+                ->get();
+            return $products;
+        } catch (\Exception $ex) {
+            return false;
+        }
+    }
 }

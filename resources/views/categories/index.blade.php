@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    {{ Breadcrumbs::render('categories') }}
     <div class="entry-content">
         @foreach($categories as $category)
             <article class="category-miniature col-lg-4 col-md-6 col-sm-6 col-xs-12"

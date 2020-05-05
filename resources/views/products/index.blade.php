@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    {{ Breadcrumbs::render('category', $products[0]) }}
+    {{ Breadcrumbs::render('products') }}
     <div class="entry-content">
         <div class="main-container">
             <div class="main-title">Products</div>
@@ -50,45 +50,6 @@
 
         $(window).on('load', function () {
             renderProducts(products);
-            $productsContainer.scroll(function () {
-                if (ajaxCompleted) {
-                    let topPoint = $productsContainer.scrollTop();
-                    let bottomVisiblePoint = $productsContainer.height();
-                    let overallHeight = $productsWrapper.height();
-                    if ((topPoint + bottomVisiblePoint >= overallHeight) && ajaxCompleted) {
-                        ajaxCompleted = false;
-                        ajaxDataObj.offset += 4;
-                        ajaxDataObj.length = ajaxDataObj.offset + 4;
-                        getNextProducts();
-                    }
-                }
-            });
-
-            function getNextProducts() {
-                let offset = ajaxDataObj.offset;
-                let limit = ajaxDataObj.limit;
-                let category_id = ajaxDataObj.category_id;
-                $.ajax({
-                    url: "{{ route('ajaxProductsCategory.post') }}",
-                    method: 'POST',
-                    data: {
-                        'offset': offset,
-                        'limit': limit,
-                        'category_id': category_id,
-                        '_token': '{{ csrf_token() }}'
-                    },
-                    success: function (products) {
-                        if (products.constructor === Array && products.length > 0) {
-                            ajaxCompleted = true;
-                            renderProducts(products);
-                        }
-                    },
-                    error: function (err) {
-                        ajaxCompleted = true;
-                        console.log(err.responseText);
-                    }
-                });
-            }
         });
 
         function renderProducts(products) {

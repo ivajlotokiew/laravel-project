@@ -11,7 +11,11 @@
  * @see https://github.com/barryvdh/laravel-ide-helper
  */
 
-namespace Illuminate\Support\Facades { 
+namespace Illuminate\Support\Facades {
+
+    use Psr\Container\ContainerExceptionInterface;
+    use Psr\Container\NotFoundExceptionInterface;
+    use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
 
     /**
      * 

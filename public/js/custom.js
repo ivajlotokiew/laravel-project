@@ -4,7 +4,6 @@
  * @returns {*}
  */
 function productBadge(product) {
-    console.log(product);
     let $mainWrap = $('<div>', {'class': 'product-container', 'data-product-id': product.id}).append(
         $('<img/>', {
             'class': 'thumbnail-img',
@@ -12,6 +11,7 @@ function productBadge(product) {
             'alt': 'thumbnail image'
         })
     );
+
     let $secondWrap = $('<div>', {'class': 'product-info-wrapper'});
     let $productWrap = $('<div>', {'class': 'product-title', text: product.name});
     let $additionalInfoWrap = $('<div>', {'class': 'additional-info'});
@@ -44,6 +44,114 @@ function productBadge(product) {
     $mainWrap.append($threeDotsWrap);
 
     return $mainWrap;
+}
+
+/**
+ *
+ * @param {Product} product
+ * @returns {*}
+ */
+function clientViewProductBadge(product) {
+    let $mainWrap = $('<article>', {
+        'class': 'product-miniature col-lg-4 col-md-6 col-sm-6 col-xs-12',
+        'data-product-id': product.id
+    });
+    let $innerWrap = $('<div>', {
+        'class': 'product-container-vertical'
+    });
+
+    let $imgContainer = $('<a>', {
+        'href': '/products/' + product.id
+    }).append($('<div>', {
+        'class': 'product-image'
+    }).append($('<img>', {
+        'class': 'p-image',
+        'src': `${product.url}`,
+        'data-src': `${product.url}`,
+        'alt': 'product image'
+    })));
+
+    let $productInfo = $('<div>', {
+        'class': 'product-info',
+        'text': product.name
+    }).append($('h5', {
+        'class': 'product-title'
+    })).append($('<div>', {
+        'class': 'product-price',
+        'text': product.price + ' Eur'
+    }));
+
+    let $btnForm = $('<div>', {
+        'class': 'product-badge-footer'
+    }).append($('<form>', {
+        'id': 'buy-form',
+        'data-product-id': product.id
+    }).append($('<button>', {
+        'type': 'submit',
+        'class': 'btn btn-primary',
+        'text': 'Add to Cart'
+    })));
+
+    $innerWrap.append($imgContainer);
+    $innerWrap.append($productInfo);
+    $innerWrap.append($btnForm);
+    $mainWrap.append($innerWrap);
+
+    return $mainWrap;
+}
+
+/**
+ *
+ * @param {Product} product
+ * @returns {*}
+ */
+function singleProductBadge(product) {
+    let mainContainer = $('<article>', {
+        'class': 'product-article',
+        'data-category-id': product.category.id,
+        'data-product-id': product.id
+    });
+
+    let innerContainer = $('<div>', {
+        'class': 'single-product-container'
+    });
+
+    let imgContainer = $('<div>', {
+        'class': 'product-image'
+    }).append($('<img>', {
+        'class': 'single-product-img',
+        'src': `${product.url}`,
+        'data-src': `${product.url}`,
+        'alt': 'product image'
+    }));
+
+    let infoContainer = $('<div>', {
+        'class': 'product-info'
+    }).append($('<div>', {
+        'class': 'product-title',
+        'text': product.name
+    })).append($('<div>', {
+        'class': 'product-description',
+        'text': typeof product.description !== "undefined" ? product.description : 'There is no product description!'
+    }));
+
+    let $btnForm = $('<div>', {
+        'class': 'product-badge-footer'
+    }).append($('<form>', {
+        'id': 'buy-form',
+        'data-product-id': product.id
+    }).append($('<button>', {
+        'type': 'submit',
+        'class': 'btn btn-primary',
+        'text': 'Add to Cart'
+    })));
+
+    innerContainer.append(imgContainer);
+    innerContainer.append(infoContainer);
+    mainContainer.append(innerContainer);
+    mainContainer.append($btnForm);
+
+    return mainContainer;
 }
 
 class Product {
