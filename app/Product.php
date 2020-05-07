@@ -14,6 +14,14 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * The orders that belong to the user.
+     */
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
     public function getImageAttribute()
     {
         return $this->product_image;

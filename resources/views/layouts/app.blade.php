@@ -14,7 +14,7 @@
 <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div id="app">
@@ -74,6 +74,15 @@
                     @endguest
                 </ul>
             </div>
+            @if(Auth::user())
+                <div class="btn-group">
+                    <a href="/cart/orders?ref=" id="my_cart" class="btn btn-link navbar-main-btn">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="jewel jewel-danger"></span>
+                        <span class="visible-lg-inline"> My cart <i class="caret"></i></span>
+                    </a>
+                </div>
+            @endif
         </div>
     </nav>
 
@@ -114,3 +123,12 @@
 @yield('page-js-script')
 
 </html>
+@if(Auth::user())
+    <script type="text/javascript">
+        let ajaxOrdersProductsQuantity = "{{ route('ajaxProductsOrdersQuantity.post') }}";
+        let csrfToken = '{{ csrf_token() }}';
+        $(window).on('load', function () {
+            showCartProductsQuantity();
+        });
+    </script>
+@endif

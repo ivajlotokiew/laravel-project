@@ -20,27 +20,31 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/products', 'ProductController@index')->name('products');
-Route::get('/products/{product}', 'ProductController@getProduct')->name('product');
+Route::get('/products', 'Product\ProductController@index')->name('products');
+Route::get('/products/{product}', 'Product\ProductController@getProduct')->name('product');
 
-Route::get('/categories', ['as' => 'categories', 'uses' => 'CategoryController@index']);
-Route::get('/categories/{category}', ['as' => 'category', 'uses' => 'CategoryController@getProductsCategory']);
+Route::get('/categories', ['as' => 'categories', 'uses' => 'Category\CategoryController@index']);
+Route::get('/categories/{category}', ['as' => 'category', 'uses' => 'Category\CategoryController@getProductsCategory']);
 
 Route::group(['middleware' => ['role:super-admin']], function () {
-    Route::get('/admin', 'admin\AdminController@index');
-    Route::get('/admin/editCategories', 'admin\AdminController@getCategories');
-    Route::get('/admin/editProducts', 'admin\AdminController@getProducts');
+    Route::get('/admin', 'Admin\AdminController@index');
+    Route::get('/admin/editCategories', 'Admin\AdminController@getCategories');
+    Route::get('/admin/editProducts', 'Admin\AdminController@getProducts');
 });
 
-Route::post('ajaxCreateProduct', 'admin\AdminController@ajaxPostCreateProduct')->name('ajaxCreateProduct.post');
-Route::post('ajaxUpdateProduct', 'admin\AdminController@ajaxPostUpdateProduct')->name('ajaxUpdateProduct.post');
+Route::post('ajaxCreateProduct', 'Admin\AdminController@ajaxPostCreateProduct')->name('ajaxCreateProduct.post');
+Route::post('ajaxUpdateProduct', 'Admin\AdminController@ajaxPostUpdateProduct')->name('ajaxUpdateProduct.post');
+Route::post('ajaxAddProductToCart', 'Product\ProductController@ajaxAddProductToCart')->name('ajaxAddProductToCart.post');
+
+Route::post('ajaxProductsOrdersQuantity', 'Order\OrderController@ajaxProductsOrdersQuantity')
+    ->name('ajaxProductsOrdersQuantity.post');
 
 
-Route::post('ajaxProducts', 'ProductController@ajaxPostGetProducts')->name('ajaxProducts.post');
-Route::post('ajaxDeleteProduct', 'ProductController@ajaxPostDeleteProduct')->name('ajaxDeleteProduct.post');
-Route::post('ajaxGetProduct', 'ProductController@ajaxPostGetProduct')->name('ajaxGetProduct.post');
+Route::post('ajaxProducts', 'Product\ProductController@ajaxPostGetProducts')->name('ajaxProducts.post');
+Route::post('ajaxDeleteProduct', 'Product\ProductController@ajaxPostDeleteProduct')->name('ajaxDeleteProduct.post');
+Route::post('ajaxGetProduct', 'Product\ProductController@ajaxPostGetProduct')->name('ajaxGetProduct.post');
 
-Route::post('ajaxCategories', 'CategoryController@ajaxPostCategories')->name('ajaxCategories.post');
-Route::post('ajaxProductsCategory', 'CategoryController@ajaxPostProductsCategory')->name('ajaxProductsCategory.post');
+Route::post('ajaxCategories', 'Category\CategoryController@ajaxPostCategories')->name('ajaxCategories.post');
+Route::post('ajaxProductsCategory', 'Category\CategoryController@ajaxPostProductsCategory')->name('ajaxProductsCategory.post');
 
-Route::post('ajaxUpdateCategory', 'CategoryController@ajaxPostUpdateCategory')->name('ajaxUpdateCategory.post');
+Route::post('ajaxUpdateCategory', 'Category\CategoryController@ajaxPostUpdateCategory')->name('ajaxUpdateCategory.post');

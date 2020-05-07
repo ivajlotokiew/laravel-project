@@ -118,15 +118,6 @@
             $("#downBtn").on("click", function () {
                 scrollBottom();
             });
-
-            // $("#eProducts").on("click", function () {
-            //     if (!(Object.keys(editedProducts).length === 0 && editedProducts.constructor === Object)) {
-            //         editProducts(editedProducts);
-            //     } else {
-            //         alert("Check console for more info.");
-            //         console.error("There are no products to edit.")
-            //     }
-            // })
         });
 
         function renderProducts(products) {
@@ -178,7 +169,7 @@
 
             editForm += ` </select></div></form></div>`;
 
-            let dialog = bootbox.dialog({
+            bootbox.dialog({
                 title: 'Edit product',
                 message: editForm,
                 size: 'large',
@@ -255,21 +246,6 @@
             let $bottomElm = $("#bottom-position")[0];
             $bottomElm.scrollIntoView({block: 'start', behavior: 'smooth'});
         }
-
-        // function objectifyForm(formArray) {//serialize data function
-        //     let returnArray = {};
-        //     for (let i = 0; i < formArray.length; i++) {
-        //         returnArray[formArray[i]['name']] = formArray[i]['value'];
-        //     }
-        //
-        //     return returnArray;
-        // }
-
-        // function storeEditedProducts(editedProduct) {
-        //     if (!editedProducts.hasOwnProperty(editedProducts.id)) {
-        //         editedProducts[editedProduct.id] = editedProduct;
-        //     }
-        // }
 
         /**
          *

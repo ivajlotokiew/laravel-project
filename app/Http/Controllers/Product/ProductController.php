@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Product;
 
+use App\Order;
 use App\Product;
+use App\User;
 use Illuminate\Http\Request;
-use App\Category;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -104,6 +107,37 @@ class ProductController extends Controller
         }
     }
 
+    public function ajaxAddProductToCart(Request $request) {
+        $request->validate([
+            'product_id' => 'required',
+            'price' => 'required',
+            'quantity' => 'required'
+        ]);
+
+        $product = Product::find($request['product_id']);
+
+        //check if product exists
+        if (!$product) {
+            return response()->json(['Error' => 'There is no product with this id'], 400);
+        }
+
+        try {
+            //create new Order Model
+            $order = new Order();
+            //Find current user
+            $user = Auth::user();
+            // Relate user with orders and create order field
+            $user->orders()->save($order);
+            //Create relation btw product and order
+            $order->products()->attach($product->id,
+                ["quantity" => $request['quantity'], "price" => $request['price']]);
+
+            return response()->json(['Success' => 'Successfully registered order'], 200);
+        } catch(\Exception $ex) {
+            return response()->json(['Error' => 'Something goes wrong'], 500);
+        }
+    }
+
     private function getProducts($params)
     {
         try {
@@ -120,18 +154,4 @@ class ProductController extends Controller
             return false;
         }
     }
-
-    /**
-     * @return array
-     */
-    private function getCategories()
-    {
-        $categories = Category::all();
-        return $categories;
-    }
-
-//    public function product($name){
-//        $product = Product::where('name', $name)->first();
-//        return view('product', compact('product'));
-//    }
 }

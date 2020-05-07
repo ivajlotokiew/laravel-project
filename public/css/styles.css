@@ -11,6 +11,18 @@ html, body {
     font-size: 28px;
 }
 
+.btn-link {
+    color: #4f4f4f;
+}
+
+#my_cart > i.fa {
+    font-size: 24px;
+}
+
+#my_cart .jewel.jewel-danger {
+    font-size: 10px;
+}
+
 .full-height {
     height: 100vh;
 }
@@ -314,6 +326,11 @@ img.thumbnail-img {
     margin-top: 20px;
 }
 
+#buy_product{
+    text-align: center;
+    margin-top: 20px;
+}
+
 .single-product-container {
     display: flex;
 }
@@ -341,4 +358,28 @@ img.thumbnail-img {
 
 .products-wrapper {
     overflow: auto;
+}
+
+#product_quantity {
+    width: 50px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.product-image-miniature {
+    width: 70px;
+    height: 70px;
+}
+
+.cart-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-container .product-name {
+    font-size: 17px;
+    font-weight: 600;
+    padding-left: 0;
+    right: 50px;;
 }

@@ -136,15 +136,23 @@ function singleProductBadge(product) {
     }));
 
     let $btnForm = $('<div>', {
-        'class': 'product-badge-footer'
-    }).append($('<form>', {
-        'id': 'buy-form',
-        'data-product-id': product.id
-    }).append($('<button>', {
+        'id': 'buy_product',
+    }).append($('<div>', {
+        'class': 'product-price',
+        'text': 'Price: ' + product.price + ' Eur'
+    })) .append($('<label>', {
+        'for': 'product_quantity',
+        'text': 'Quantity:',
+    })).append($('<input>', {
+        'type': 'number',
+        'id': 'product_quantity',
+        'value': '1'
+    })).append($('<button>', {
         'type': 'submit',
+        'data-product-id': product.id,
         'class': 'btn btn-primary',
         'text': 'Add to Cart'
-    })));
+    }));
 
     innerContainer.append(imgContainer);
     innerContainer.append(infoContainer);
@@ -152,6 +160,21 @@ function singleProductBadge(product) {
     mainContainer.append($btnForm);
 
     return mainContainer;
+}
+
+function showCartProductsQuantity() {
+    $.ajax({
+        url: ajaxOrdersProductsQuantity,
+        method: 'POST',
+        data: { '_token': csrfToken },
+        success: function (response) {
+            $('#my_cart').find('span').first().text(response['count']);
+        },
+        error: function (err) {
+            ajaxCompleted = true;
+            console.log(err.responseText);
+        }
+    });
 }
 
 class Product {
