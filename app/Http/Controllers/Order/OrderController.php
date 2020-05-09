@@ -28,6 +28,18 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
+    public function index()
+    {
+        $orders = $this->getProductsOrders('all');
+        return view('orders.index', compact('orders'));
+    }
+
+    public function getUnconfirmedProductsOrders()
+    {
+
+        return view('orders.order');
+    }
+
     public function ajaxProductsOrdersQuantity()
     {
         $user = Auth::user();
@@ -43,5 +55,23 @@ class OrderController extends Controller
         }
 
         return response(['count' => $count]);
+    }
+
+    private function getProductsOrders($orders)
+    {
+        $user = Auth::user();
+        if ($orders === 'all') {
+            $orders = $user->orders()->get();
+        } else {
+            $orders = $user->orders()->where('confirmed', 0)->get();
+        }
+
+        return $orders;
+
+//        foreach ($orders as $order) {
+//            foreach ($order->products()->get() as $product) {
+//                $count += $product->pivot->quantity;
+//            }
+//        }
     }
 }

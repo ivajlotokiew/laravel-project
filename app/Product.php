@@ -14,12 +14,21 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+
     /**
      * The orders that belong to the user.
      */
     public function orders()
     {
         return $this->belongsToMany(Order::class);
+    }
+
+    /**
+     * The orders that belong to the user.
+     */
+    public function carts()
+    {
+        return $this->belongsToMany(Cart::class)->withPivot(['quantity', 'price']);
     }
 
     public function getImageAttribute()

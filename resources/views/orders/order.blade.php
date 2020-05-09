@@ -24,7 +24,6 @@
 @section('page-js-script')
     <script type="text/javascript">
         let productData = '<?=json_encode($product);?>';
-        let ajaxQuantityProductsCart = '{{route("ajaxGetProductsQuantityToCart.post")}}';
         let product = JSON.parse(productData);
         let mainContainer = $('.main-container');
         let $body = $("body");

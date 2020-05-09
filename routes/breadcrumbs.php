@@ -27,3 +27,9 @@ Breadcrumbs::for('product', function ($trail, $product) {
     $trail->parent('products');
     $trail->push($product->name, route('product', $product->id));
 });
+
+
+Breadcrumbs::for('orders', function ($trail) {
+    $trail->parent('home');
+    $trail->push('Orders', route('orders'));
+});

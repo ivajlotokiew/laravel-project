@@ -10,13 +10,6 @@
 
                 </div>
             </div>
-
-        </div>
-        <div id="bottom-position" class="form-group">
-            <label for="eProducts">
-                <input type="button" class="btn button-primary pull-right" name="name" id="eProducts"
-                       value="Apply changes"/>
-            </label>
         </div>
     </div>
 
@@ -38,6 +31,7 @@
     <script type="text/javascript">
         let productsData = '<?= json_encode($products); ?>';
         let products = JSON.parse(productsData);
+        let ajaxQuantityProductsCart = '{{route("ajaxGetProductsQuantityToCart.post")}}';
         let $productsContainer = $('.products-container');
         let $productsWrapper = $('.products-wrapper');
         let $body = $("body");
@@ -48,8 +42,19 @@
             'category_id': products[0].category_id
         };
 
+        // console.log(typeof products);
+        console.log(products);
         $(window).on('load', function () {
             renderProducts(products);
+
+            $body.on('click', '#buy-btn', function () {
+                let params = [];
+                params['id'] = $(this).closest('article.product-miniature').data('product-id');
+                params['price'] = products.find(x => x.id === params['id']).price;
+                params['quantity'] = 1;
+                addProductToCart(params);
+            });
+
             $productsContainer.scroll(function () {
                 if (ajaxCompleted) {
                     let topPoint = $productsContainer.scrollTop();
@@ -98,5 +103,25 @@
             }
         }
 
+        function addProductToCart(params) {
+            $.ajax({
+                url: "{{ route('ajaxAddProductToCart.post') }}",
+                method: 'POST',
+                data: {
+                    'product_id': params['id'],
+                    'price': params['price'],
+                    'quantity': params['quantity'],
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function () {
+                    let product = products.find(x => x.id === params['id']);
+                    addToCartPopUp(product, 1);
+                },
+                error: function (err) {
+                    ajaxCompleted = true;
+                    console.log(err.responseText);
+                }
+            });
+        }
     </script>
 @stop

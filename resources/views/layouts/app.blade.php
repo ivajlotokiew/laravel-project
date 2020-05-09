@@ -76,7 +76,7 @@
             </div>
             @if(Auth::user())
                 <div class="btn-group">
-                    <a href="/cart/orders?ref=" id="my_cart" class="btn btn-link navbar-main-btn">
+                    <a href="{{route('ordersProducts')}}" id="my_cart" class="btn btn-link navbar-main-btn">
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                         <span class="jewel jewel-danger"></span>
                         <span class="visible-lg-inline"> My cart <i class="caret"></i></span>
@@ -125,7 +125,7 @@
 </html>
 @if(Auth::user())
     <script type="text/javascript">
-        let ajaxOrdersProductsQuantity = "{{ route('ajaxProductsOrdersQuantity.post') }}";
+        let ajaxCartProductsQuantity = "{{ route('ajaxProductsCartQuantity.post') }}";
         let csrfToken = '{{ csrf_token() }}';
         $(window).on('load', function () {
             showCartProductsQuantity();

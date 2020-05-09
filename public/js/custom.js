@@ -83,14 +83,12 @@ function clientViewProductBadge(product) {
 
     let $btnForm = $('<div>', {
         'class': 'product-badge-footer'
-    }).append($('<form>', {
-        'id': 'buy-form',
-        'data-product-id': product.id
-    }).append($('<button>', {
-        'type': 'submit',
+    }).append($('<input>', {
+        'type': 'button',
+        'id': 'buy-btn',
         'class': 'btn btn-primary',
-        'text': 'Add to Cart'
-    })));
+        'value': 'Add to Cart'
+    }));
 
     $innerWrap.append($imgContainer);
     $innerWrap.append($productInfo);
@@ -140,7 +138,7 @@ function singleProductBadge(product) {
     }).append($('<div>', {
         'class': 'product-price',
         'text': 'Price: ' + product.price + ' Eur'
-    })) .append($('<label>', {
+    })).append($('<label>', {
         'for': 'product_quantity',
         'text': 'Quantity:',
     })).append($('<input>', {
@@ -164,17 +162,99 @@ function singleProductBadge(product) {
 
 function showCartProductsQuantity() {
     $.ajax({
-        url: ajaxOrdersProductsQuantity,
+        url: ajaxCartProductsQuantity,
         method: 'POST',
-        data: { '_token': csrfToken },
+        data: {'_token': csrfToken},
         success: function (response) {
-            $('#my_cart').find('span').first().text(response['count']);
+            $('#my_cart').find('span').first().text(response['quantity']);
         },
         error: function (err) {
             ajaxCompleted = true;
             console.log(err.responseText);
         }
     });
+}
+
+function addToCartPopUp(product, quantity) {
+    if (quantity <= 0) {
+        quantity = 1;
+    }
+
+    let editForm = `
+                    <div class="cart-container row">
+                        <div class="img-container col-sm-2">
+                            <img src="${product.img_url}" class="product-image-miniature" alt="product image">
+                        </div>
+                        <div class="product-name col-sm-2">${product.name}</div>
+                        <div class="col-sm-4">Quantity: ${quantity}</div>
+                        <div class="product-price col-sm-3">Total price: ${quantity * product.price} Eur</div>
+                    </div>
+            `;
+
+    bootbox.dialog({
+        title: 'The product was added to the cart.',
+        message: editForm,
+        size: 'large',
+        onShown: function(e) {
+            $.ajax({
+                url: ajaxQuantityProductsCart,
+                method: 'POST',
+                data: {
+                    '_token': csrfToken
+                },
+                success: function (response) {
+                    $('#my_cart').find('span').first().text(response['quantity']);
+                },
+                error: function (err) {
+                    ajaxCompleted = true;
+                    console.log(err.responseText);
+                }
+            });
+        },
+        buttons: {
+            Cancel: {
+                label: "Cancel",
+                className: 'btn-danger',
+                callback: function () {
+                    console.log('Custom cancel clicked');
+                }
+            },
+            Edit: {
+                label: "Look at the cart",
+                className: 'btn-info',
+                callback: function () {
+                    $.ajax({
+                        url: "{{ route('ajaxUpdateProduct.post') }}",
+                        method: 'POST',
+                        data: form_data,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            let ajaxDataProduct = response['product'];
+                            let $currentProduct =
+                                $('div.product-container[data-product-id="' + form_data.get('id') + '"]');
+
+                            $currentProduct.find('div.product-title').text(ajaxDataProduct.name);
+                            $currentProduct.find('span.product-price').text(ajaxDataProduct.price + 'Eur | ');
+                            let category = categories.find(x => x.id === ajaxDataProduct.category_id);
+                            $currentProduct.find('span.product-category').text(category.name);
+
+                        },
+                        error: function (xhr, status, data) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                $.each(errors, function (key, val) {
+                                    console.log(key + ' => ' + val);
+                                    $('.modal-body').find('span.' + key).show();
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    })
 }
 
 class Product {

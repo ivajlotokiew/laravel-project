@@ -1,16 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    {{ Breadcrumbs::render('products') }}
+    {{ Breadcrumbs::render('orders') }}
     <div class="entry-content">
         <div class="main-container">
-            <div class="main-title">Products</div>
-            <div class="products-container">
-                <div class="products-wrapper">
+            <div class="main-title">Orders</div>
+            <div class="orders-container">
+                <div class="orders-wrapper">
 
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -30,26 +29,27 @@
 
 @section('page-js-script')
     <script type="text/javascript">
-        let productsData = '<?= json_encode($products); ?>';
-        let products = JSON.parse(productsData);
-        let $productsContainer = $('.products-container');
-        let $productsWrapper = $('.products-wrapper');
+        let ordersData = '<?= json_encode($orders); ?>';
+        let orders = JSON.parse(ordersData);
+        let $ordersContainer = $('.orders-container');
+        let $ordersWrapper = $('.orders-wrapper');
         let $body = $("body");
         let ajaxCompleted = true;
         let ajaxDataObj = {
             'offset': 4,
             'limit': 8,
-            'category_id': products[0].category_id
+            'category_id': orders[0].category_id
         };
 
         $(window).on('load', function () {
-            renderProducts(products);
+            console.log(orders);
+            renderOrders(orders);
         });
 
-        function renderProducts(products) {
-            for (let key in products) {
-                $productsWrapper.append(
-                    clientViewProductBadge(Product.bindProductObject(products[key])));
+        function renderOrders(orders) {
+            for (let key in orders) {
+                $ordersWrapper.append(
+                    clientViewProductBadge(Product.bindProductObject(orders[key])));
             }
         }
 
