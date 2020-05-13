@@ -29,6 +29,10 @@ Route::get('/categories/{category}', ['as' => 'category', 'uses' => 'Category\Ca
 Route::get('/orders', ['as' => 'orders', 'uses' => 'Order\OrderController@index']);
 Route::get('/orders/products', ['as' => 'ordersProducts', 'uses' => 'Order\OrderController@getUnconfirmedProductsOrders']);
 
+Route::get('/cart/products', ['as' => 'cartProducts', 'uses' => 'Cart\CartController@getCartProducts']);
+
+Route::get('/cart/empty', ['as' => 'emptyCart', 'uses' => 'Cart\CartController@emptyCart']);
+
 Route::group(['middleware' => ['role:super-admin']], function () {
     Route::get('/admin', 'Admin\AdminController@index');
     Route::get('/admin/editCategories', 'Admin\AdminController@getCategories');
@@ -50,6 +54,12 @@ Route::post('ajaxGetProductsQuantityToCart', 'Cart\CartController@ajaxGetProduct
 
 Route::post('ajaxProductsCartQuantity', 'Cart\CartController@ajaxProductsCartQuantity')
     ->name('ajaxProductsCartQuantity.post');
+
+Route::post('ajaxChangeProductCartQuantity', 'Cart\CartController@ajaxChangeProductCartQuantity')
+    ->name('ajaxChangeProductCartQuantity.post');
+
+Route::post('ajaxRemoveCartProduct', 'Cart\CartController@ajaxRemoveCartProduct')
+    ->name('ajaxRemoveCartProduct.post');
 
 Route::post('ajaxProducts', 'Product\ProductController@ajaxPostGetProducts')->name('ajaxProducts.post');
 Route::post('ajaxDeleteProduct', 'Product\ProductController@ajaxPostDeleteProduct')->name('ajaxDeleteProduct.post');

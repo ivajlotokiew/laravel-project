@@ -126,6 +126,7 @@ class CategoryController extends Controller
                 ->offset($params['offset'])
                 ->limit($params['limit'])
                 ->get();
+
             return $products;
         } catch (\Exception $ex) {
             return false;

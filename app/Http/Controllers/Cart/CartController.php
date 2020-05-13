@@ -30,6 +30,11 @@ class CartController extends Controller
         $this->middleware('auth');
     }
 
+    public function emptyCart()
+    {
+        return view('cart.empty');
+    }
+
     public function ajaxProductsCartQuantity()
     {
         $user = Auth::user();
@@ -77,7 +82,7 @@ class CartController extends Controller
                 $openCart->created_at = date('Y-m-d');
                 $user->carts()->save($openCart);
                 $openCart->products()->sync([$product->id => ['quantity' => $request['quantity'],
-                    'price' => $request['price']]]);
+                    'price' => $request['price'] * $request['quantity']]]);
                 DB::commit();
                 return response(['Success' => 'Successfully added product to open cart!']);
             }
@@ -91,15 +96,17 @@ class CartController extends Controller
                         if ($prd->id === $product->id) {
                             $openCart->products()->updateExistingPivot(
                                 $prd->id, ['quantity' => $openCart->products()->where('product_id', $prd->id)->first()->pivot->quantity + $request['quantity'],
-                                'price' => $request['price']]);
+                                'price' => $request['price'] * $request['quantity']]);
                             $productAlreadyInCart = true;
                             break;
                         }
                     }
 
                     if (!$productAlreadyInCart) {
-                        $openCart->products()->attach(array($product->id => array('quantity' => $request['quantity'], 'price' => $request['price'])));
+                        $openCart->products()->attach(array($product->id => array('quantity' => $request['quantity'], 'price' => $request['price'] * $request['quantity'])));
                     }
+                } else {
+                    $openCart->products()->attach(array($product->id => array('quantity' => $request['quantity'], 'price' => $request['price'] * $request['quantity'])));
                 }
 
                 DB::commit();
@@ -114,7 +121,8 @@ class CartController extends Controller
         }
     }
 
-    public function ajaxGetProductsQuantityToCart() {
+    public function ajaxGetProductsQuantityToCart()
+    {
         $user = Auth::user();
         $hasOpenCart = $user->carts()->where('confirmed', 0)->count();
         if (!$hasOpenCart) {
@@ -129,5 +137,90 @@ class CartController extends Controller
 
             return response(['quantity' => $quantity]);
         }
+    }
+
+    public function getCartProducts()
+    {
+        $user = Auth::user();
+        $hasOpenCart = $user->carts()->where('confirmed', 0)->count();
+//        dd($hasOpenCart);
+
+        if (!$hasOpenCart) {
+            return view('cart.empty');
+        } else {
+            $openCart = $user->carts()->where('confirmed', 0)->first();
+            $cProducts = $openCart->products()->get();
+            if ($cProducts->count() === 0) {
+                return view('cart.empty');
+            }
+
+            $cart = $this->cartProductsCollection($cProducts);
+            $totalPrice = Cart::totalPrice($openCart);
+            return view('cart.product', compact('cart', 'totalPrice'));
+        }
+    }
+
+    private function cartProductsCollection($cartProducts)
+    {
+        $cProducts = [];
+        $cart = ['id' => $cartProducts[0]->getOriginal('pivot_cart_id')];
+        foreach ($cartProducts as $cProduct) {
+            $product = [
+                'id' => $cProduct['id'],
+                'name' => $cProduct['name'],
+                'price' => $cProduct['price'],
+                'img_url' => $cProduct['product_image'],
+                'category_id' => $cProduct['category_id']
+            ];
+
+            $cProducts[] = ['cart' => $cart, 'product' => $product,
+                'quantity' => $cProduct->getOriginal('pivot_quantity')];
+        }
+
+        return $cProducts;
+    }
+
+    function ajaxChangeProductCartQuantity(Request $request)
+    {
+        $request->validate([
+            'cart_id' => ['required', 'integer'],
+            'product_id' => ['required', 'integer'],
+            'quantity' => ['required', 'integer', 'min:1']
+        ]);
+
+        $cart = Cart::find($request['cart_id']);
+        $product = Product::find($request['product_id']);
+        if ($cart->confirmed !== 0) {
+            return response(['Error' => 'There is no open cart'], 400);
+        } else {
+            $cart->products()->updateExistingPivot($request['product_id'], ['quantity' => $request['quantity'],
+                'price' => $product->price * $request['quantity']]);
+            $totalPrice = Cart::totalPrice($cart);
+            $productTotalPrice = $cart->products()
+                ->where('product_id', $request['product_id'])->first()->pivot->price;
+            return response(['Success' => 'Successfully updated cart product quantity!',
+                'total_price' => $totalPrice, 'product_total_price' => $productTotalPrice]);
+        }
+    }
+
+    function ajaxRemoveCartProduct(Request $request)
+    {
+        $request->validate([
+            'cart_id' => ['required', 'integer'],
+            'product_id' => ['required', 'integer'],
+        ]);
+
+        $cart = Cart::find($request['cart_id']);
+        if ($cart->count() === 0) return response(['Error' => 'There is no cart with this id'], 400);
+
+        try {
+            $cart->products()->detach($request['product_id']);
+            $totalPrice = Cart::totalPrice($cart);
+
+            return response(['Success' => 'Successfully deleted cart product!', 'total_price' => $totalPrice]);
+        } catch (\Exception $ex) {
+            return response(['Error' => 'Something goes wrong!'], 500);
+        }
+
     }
 }

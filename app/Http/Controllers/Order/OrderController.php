@@ -28,6 +28,11 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
+    public function ajaxAddCartProductsToOrder()
+    {
+
+    }
+
     public function index()
     {
         $orders = $this->getProductsOrders('all');

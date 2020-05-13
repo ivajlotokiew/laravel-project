@@ -42,8 +42,6 @@
             'category_id': products[0].category_id
         };
 
-        // console.log(typeof products);
-        console.log(products);
         $(window).on('load', function () {
             renderProducts(products);
 

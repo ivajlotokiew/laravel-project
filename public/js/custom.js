@@ -100,6 +100,71 @@ function clientViewProductBadge(product) {
 
 /**
  *
+ * @param {CartProduct} cartProducts
+ * @returns {*}
+ */
+function cartProductsViewBadge(cartProducts) {
+    let $mainWrapper = $('<div>', {
+        "class": "cart-container row",
+        'data-product-id': cartProducts.product.id,
+        'data-cart-id': cartProducts.cart.id
+    });
+
+    let $imgContainer = $('<div>', {
+        'class': 'img-container col-sm-2'
+    }).append($('<img>', {
+        'class': 'product-image-miniature',
+        'alt': 'product image',
+        'src': `${cartProducts.product.url}`
+    }));
+
+    let $quantityContainer = $('<div>', {
+        'class': 'col-sm-4'
+    }).append($('<label>', {
+        'for': 'product-quantity',
+        'text': 'Quantity: '
+    })).append($('<input>', {
+        'class': 'product-quantity',
+        'type': 'number',
+        'value': cartProducts.quantity
+    }));
+
+    $mainWrapper
+        .append($imgContainer)
+        .append($('<div>', {
+            'class': 'product-name col-sm-2',
+            'text': cartProducts.product.name
+        }))
+        .append($quantityContainer)
+        .append($('<div>', {
+            'class': 'spinner-border',
+            'role': 'status'
+        })
+            .append($('<span>', {
+                'class': 'sr-only',
+                'text': 'Loading...'
+            })))
+        .append($('<div>', {
+            'class': 'product-price col-sm-3',
+            'text': 'Price:'
+        })
+            .append($('<span>', {
+                'class': 'pPrice',
+                'text': cartProducts.product.price * cartProducts.quantity
+            }))
+            .append($('<span>', {
+                'text': 'Eur'
+            }))
+            .append($('<div>', {
+                'class': 'remove-from-cart',
+                'text': 'Remove'
+            })));
+
+    return $mainWrapper;
+}
+
+/**
+ *
  * @param {Product} product
  * @returns {*}
  */
@@ -195,21 +260,8 @@ function addToCartPopUp(product, quantity) {
         title: 'The product was added to the cart.',
         message: editForm,
         size: 'large',
-        onShown: function(e) {
-            $.ajax({
-                url: ajaxQuantityProductsCart,
-                method: 'POST',
-                data: {
-                    '_token': csrfToken
-                },
-                success: function (response) {
-                    $('#my_cart').find('span').first().text(response['quantity']);
-                },
-                error: function (err) {
-                    ajaxCompleted = true;
-                    console.log(err.responseText);
-                }
-            });
+        onShown: function () {
+            cartProductsQuantity();
         },
         buttons: {
             Cancel: {
@@ -219,42 +271,32 @@ function addToCartPopUp(product, quantity) {
                     console.log('Custom cancel clicked');
                 }
             },
-            Edit: {
+            Confirm: {
                 label: "Look at the cart",
                 className: 'btn-info',
                 callback: function () {
-                    $.ajax({
-                        url: "{{ route('ajaxUpdateProduct.post') }}",
-                        method: 'POST',
-                        data: form_data,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            let ajaxDataProduct = response['product'];
-                            let $currentProduct =
-                                $('div.product-container[data-product-id="' + form_data.get('id') + '"]');
-
-                            $currentProduct.find('div.product-title').text(ajaxDataProduct.name);
-                            $currentProduct.find('span.product-price').text(ajaxDataProduct.price + 'Eur | ');
-                            let category = categories.find(x => x.id === ajaxDataProduct.category_id);
-                            $currentProduct.find('span.product-category').text(category.name);
-
-                        },
-                        error: function (xhr, status, data) {
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                $.each(errors, function (key, val) {
-                                    console.log(key + ' => ' + val);
-                                    $('.modal-body').find('span.' + key).show();
-                                });
-                            }
-                        }
-                    });
+                    window.location.href = "/cart/products";
                 }
             }
         }
     })
+}
+
+function cartProductsQuantity() {
+    $.ajax({
+        url: ajaxQuantityProductsCart,
+        method: 'POST',
+        data: {
+            '_token': csrfToken
+        },
+        success: function (response) {
+            $('#my_cart').find('span').first().text(response['quantity']);
+        },
+        error: function (err) {
+            ajaxCompleted = true;
+            console.log(err.responseText);
+        }
+    });
 }
 
 class Product {
@@ -444,4 +486,145 @@ class Category {
 
         return category;
     }
+}
+
+class Cart {
+    get id() {
+        return this._id;
+    }
+
+    set id(val) {
+        if (val == null) {
+            throw new Error("Id must be indicated");
+        }
+
+        this._id = val;
+    }
+
+    get createdAt() {
+        return this._createdAt;
+    }
+
+    set createdAt(val) {
+        this._createdAt = val;
+    }
+
+    get updatedAt() {
+        return this._updatedAt;
+    }
+
+    set updatedAt(val) {
+        this._updatedAt = val;
+    }
+
+    static getNameId() {
+        return 'id'
+    }
+
+    static getNameCreatedAt() {
+        return 'created_at';
+    }
+
+    static getNameUpdatedAt() {
+        return 'updated_at'
+    }
+
+    /**
+     *
+     * @param obj
+     * @returns {Cart}
+     */
+    static bindCategoryObject(obj) {
+        let cart = new Cart();
+        cart.id = typeof obj[Cart.getNameId()] !== undefined ? obj[Cart.getNameId()] : null;
+        cart.createdAt = typeof obj[Cart.getNameCreatedAt()] !== undefined ? obj[Cart.getNameCreatedAt()] : null;
+        cart.updatedAt = typeof obj[Cart.getNameUpdatedAt()] !== undefined ? obj[Cart.getNameUpdatedAt()] : null;
+
+        return cart;
+    }
+}
+
+class CartProduct {
+    get id() {
+        return this._id;
+    }
+
+    set id(val) {
+        this._id = val;
+    }
+
+    /**
+     *
+     * @returns {Cart}
+     */
+    get cart() {
+        return this._cart;
+    }
+
+    /**
+     *
+     * @param {Cart} val
+     */
+    set cart(val) {
+        this._cart = val;
+    }
+
+    /**
+     *
+     * @returns {Product}
+     */
+    get product() {
+        return this._product;
+    }
+
+    set product(val) {
+        this._product = val;
+    }
+
+    get quantity() {
+        return this._quantity;
+    }
+
+    set quantity(val) {
+        this._quantity = val;
+    }
+
+    get totalPrice() {
+        return this._totalPrice;
+    }
+
+    set totalPrice(val) {
+        this._totalPrice = val;
+    }
+
+    static getNameId() {
+        return 'id'
+    }
+
+    static getNameQuantity() {
+        return 'quantity';
+    }
+
+    static getNameTotalPrice() {
+        return 'total_price';
+    }
+
+    static bindCartProductObject(obj) {
+        let cartProduct = new CartProduct();
+        cartProduct.id = typeof obj[CartProduct.getNameId()] !== undefined ? obj[CartProduct.getNameId()] : null;
+        cartProduct.quantity = typeof obj[CartProduct.getNameQuantity()] !== undefined ? obj[CartProduct.getNameQuantity()] : null;
+        cartProduct.totalPrice = typeof obj[CartProduct.getNameTotalPrice()] !== undefined ? obj[CartProduct.getNameTotalPrice()] : null;
+        const productObject = typeof obj['product'] !== "undefined" ? obj['product'] : null;
+        if (productObject !== null) {
+            cartProduct.product = Product.bindProductObject(productObject);
+        }
+
+        const cartObject = typeof obj['cart'] !== "undefined" ? obj['cart'] : null;
+        if (cartObject !== null) {
+            cartProduct.cart = Cart.bindCategoryObject(cartObject);
+        }
+
+        return cartProduct;
+    }
+
 }

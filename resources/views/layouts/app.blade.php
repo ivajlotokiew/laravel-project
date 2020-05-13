@@ -76,7 +76,7 @@
             </div>
             @if(Auth::user())
                 <div class="btn-group">
-                    <a href="{{route('ordersProducts')}}" id="my_cart" class="btn btn-link navbar-main-btn">
+                    <a href="{{route('cartProducts')}}" id="my_cart" class="btn btn-link navbar-main-btn">
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                         <span class="jewel jewel-danger"></span>
                         <span class="visible-lg-inline"> My cart <i class="caret"></i></span>

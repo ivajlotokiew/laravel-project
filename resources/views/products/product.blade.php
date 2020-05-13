@@ -55,7 +55,6 @@
                     }
                 });
             }
-
         });
 
         function renderProduct(product) {
