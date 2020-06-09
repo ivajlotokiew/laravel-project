@@ -38,6 +38,7 @@
 @section('page-js-script')
     <script type="text/javascript">
         let $body = $('body');
+        let ajaxSuccessfullyEditedCategory = false;
         $(window).on('load', function () {
             $body.on('click', '.category-miniature', function () {
                 editCategory(this);
@@ -71,6 +72,12 @@
                     size: 'large',
                     onEscape: true,
                     backdrop: true,
+                    onHide: function () {
+                        if (ajaxSuccessfullyEditedCategory) {
+                            ajaxGetEditedCategory($categoryId);
+                            ajaxSuccessfullyEditedCategory = false;
+                        }
+                    },
                     buttons: {
                         Cancel: {
                             label: 'Cancel',
@@ -95,14 +102,16 @@
                                     contentType: false,
                                     processData: false,
                                     success: function (response) {
-
-                                    }, error: function (error) {
-
+                                        ajaxSuccessfullyEditedCategory = true;
+                                        bootbox.alert('Successfully edited category');
+                                    },
+                                    error: function (err) {
+                                        ajaxCompleted = true;
+                                        console.log(err.responseText);
                                     }
                                 });
 
                                 return false;
-
                             }
                         }
                     }
@@ -124,6 +133,28 @@
             $body.on('change', "#cFile", function () {
                 readURL(this);
             });
+
+            function ajaxGetEditedCategory($categoryId) {
+                $.ajax({
+                    url: '{{route("ajaxGetEditedCategory.post")}}',
+                    method: 'POST',
+                    data: {
+                        'category_id': $categoryId,
+                        '_token': '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        let $mainBadgeElement = $body.find("article[data-category-id='" + $categoryId + "']");
+                        $mainBadgeElement.find('h5.category-title').text(response.category.name);
+                        $mainBadgeElement.find('img.img_1').attr('src', response.category.category_image);
+                        $mainBadgeElement.find('.category-image > img').data('src', response.category.category_image);
+                    },
+                    error: function (err) {
+                        ajaxCompleted = true;
+                        console.log(err.responseText);
+                    }
+                });
+            }
         });
+
     </script>
 @stop

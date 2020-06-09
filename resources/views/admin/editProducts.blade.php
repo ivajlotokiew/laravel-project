@@ -31,7 +31,7 @@
     <script type="text/javascript">
         let assetBaseUrl = "{{ asset('') }}";
         let ajaxGetProductRoute = "{{ route('ajaxGetProduct.post') }}";
-        let csrfToken = '{{ csrf_token() }}';
+        {{--let csrfToken = '{{ csrf_token() }}';--}}
         let editedProducts = {};
         var categoriesData = '<?php echo json_encode($categories); ?>';
         var categories = JSON.parse(categoriesData);
@@ -208,6 +208,7 @@
                                     $currentProduct.find('span.product-price').text(ajaxDataProduct.price + 'Eur | ');
                                     let category = categories.find(x => x.id === ajaxDataProduct.category_id);
                                     $currentProduct.find('span.product-category').text(category.name);
+                                    $currentProduct.find('img.thumbnail-img').attr('src', ajaxDataProduct.product_image);
 
                                 },
                                 error: function (xhr, status, data) {

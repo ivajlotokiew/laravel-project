@@ -12,6 +12,7 @@
 @section('page-style-files')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <link href="{{ asset('dist/css/lightbox.css') }}" rel="stylesheet">
 @stop
 
 @section('page-js-files')
@@ -19,6 +20,8 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/bootbox.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+    <script src="{{ asset('dist/js/lightbox.js') }}"></script>
+
 @stop
 
 @section('page-js-script')

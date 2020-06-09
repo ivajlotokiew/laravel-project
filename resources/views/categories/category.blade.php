@@ -37,7 +37,7 @@
         let $body = $("body");
         let ajaxCompleted = true;
         let ajaxDataObj = {
-            'offset': 4,
+            'offset': 0,
             'limit': 8,
             'category_id': products[0].category_id
         };
@@ -60,8 +60,7 @@
                     let overallHeight = $productsWrapper.height();
                     if ((topPoint + bottomVisiblePoint >= overallHeight) && ajaxCompleted) {
                         ajaxCompleted = false;
-                        ajaxDataObj.offset += 4;
-                        ajaxDataObj.length = ajaxDataObj.offset + 4;
+                        ajaxDataObj.offset += 8;
                         getNextProducts();
                     }
                 }

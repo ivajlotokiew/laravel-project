@@ -133,4 +133,16 @@ class AdminController extends Controller
 
         return response()->json(['Success' => 'Product was successfully created!', 'product' => $product]);
     }
+
+    public function ajaxGetEditedCategory(Request $request)
+    {
+        $request->validate([
+            'category_id' => 'required|min:1|Integer',
+        ]);
+
+        $categoryId = $request['category_id'];
+        $category = Category::findOrFail($categoryId);
+
+        return response()->json(['category' => $category]);
+    }
 }

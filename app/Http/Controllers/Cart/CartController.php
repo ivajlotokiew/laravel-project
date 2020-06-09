@@ -142,22 +142,12 @@ class CartController extends Controller
     public function getCartProducts()
     {
         $user = Auth::user();
-        $hasOpenCart = $user->carts()->where('confirmed', 0)->count();
-//        dd($hasOpenCart);
+        $openCart = $user->carts()->where('confirmed', 0)->first();
+        $cProducts = $openCart->products()->get();
+        $cart = $this->cartProductsCollection($cProducts);
+        $totalPrice = Cart::totalPrice($openCart);
 
-        if (!$hasOpenCart) {
-            return view('cart.empty');
-        } else {
-            $openCart = $user->carts()->where('confirmed', 0)->first();
-            $cProducts = $openCart->products()->get();
-            if ($cProducts->count() === 0) {
-                return view('cart.empty');
-            }
-
-            $cart = $this->cartProductsCollection($cProducts);
-            $totalPrice = Cart::totalPrice($openCart);
-            return view('cart.product', compact('cart', 'totalPrice'));
-        }
+        return view('cart.product', compact('cart', 'totalPrice'));
     }
 
     private function cartProductsCollection($cartProducts)
@@ -196,10 +186,10 @@ class CartController extends Controller
             $cart->products()->updateExistingPivot($request['product_id'], ['quantity' => $request['quantity'],
                 'price' => $product->price * $request['quantity']]);
             $totalPrice = Cart::totalPrice($cart);
-            $productTotalPrice = $cart->products()
+            $singleProductPrice = $cart->products()
                 ->where('product_id', $request['product_id'])->first()->pivot->price;
             return response(['Success' => 'Successfully updated cart product quantity!',
-                'total_price' => $totalPrice, 'product_total_price' => $productTotalPrice]);
+                'total_price' => $totalPrice, 'single_product_price' => $singleProductPrice]);
         }
     }
 
@@ -221,6 +211,16 @@ class CartController extends Controller
         } catch (\Exception $ex) {
             return response(['Error' => 'Something goes wrong!'], 500);
         }
+    }
 
+    function ajaxCheckIfCartEmpty(Request $request) {
+        $request->validate([
+            'cart_id' => ['required', 'integer', 'min:1'],
+        ]);
+
+        $cart = Cart::find($request['cart_id']);
+        $isCartEmpty = $cart->products()->get()->count() === 0;
+
+        return response()->json(['is_cart_empty' => $isCartEmpty]);
     }
 }
