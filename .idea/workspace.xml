@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3e0fc8d1-6782-423f-85b4-373389899730" name="Default" comment="" />
+    <list default="true" id="3e0fc8d1-6782-423f-85b4-373389899730" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,9 +22,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="425">
               <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
-              <folding>
-                <element signature="e#7#56#0#PHP" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -51,7 +50,7 @@
       <file leaf-file-name="product.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/products/product.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1575">
+            <state relative-caret-position="1500">
               <caret line="63" column="41" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
             </state>
           </provider>
@@ -69,8 +68,8 @@
       <file leaf-file-name="editCategories.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/admin/editCategories.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="147" column="85" lean-forward="true" selection-start-line="147" selection-start-column="85" selection-end-line="147" selection-end-column="85" />
+            <state relative-caret-position="657">
+              <caret line="157" selection-start-line="157" selection-end-line="157" />
             </state>
           </provider>
         </entry>
@@ -79,7 +78,7 @@
         <entry file="file://$PROJECT_DIR$/public/js/custom.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="260">
-              <caret line="305" column="5" lean-forward="true" selection-start-line="305" selection-start-column="5" selection-end-line="305" selection-end-column="5" />
+              <caret line="305" column="5" selection-start-line="305" selection-start-column="5" selection-end-line="305" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -367,7 +366,7 @@
     <property name="SearchEverywhereHistoryKey" value="categori&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/admin/editCategories.blade.php&#10;.css&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/public/css/styles.css&#10;custom.js&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/public/js/custom.js&#10;product.blad&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/products/product.blade.php&#10;storage&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/storage&#10;empty.b&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/cart/empty.blade.php&#10;styles&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/public/css/styles.css&#10;ordercontro&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Order/OrderController.php&#10;category.b&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/categories/category.blade.php&#10;categorycon&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Category/CategoryController.php&#10;categ&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/categories/category.blade.php&#10;produ&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/cart/product.blade.php&#10;category&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/categories/category.blade.php&#10;edit&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/admin/editCategories.blade.php&#10;editpro&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/admin/editProducts.blade.php&#10;admincontro&#9;null&#9;null&#10;.js&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/public/js/custom.js&#10;empty&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/cart/empty.blade.php&#10;mail.&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/config/mail.php&#10;ordersh&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Mail/OrderShipped.php&#10;views&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views&#10;services.php&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/config/services.php&#10;ordercont&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Order/OrderController.php&#10;cart.php&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Cart.php&#10;order.php&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Order.php&#10;product.bl&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/products/product.blade.php&#10;app.blad&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/layouts/app.blade.php&#10;cart.ph&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Cart.php&#10;style&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/public/css/styles.css&#10;.blad&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/categories/category.blade.php&#10;categoryc&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Category/CategoryController.php&#10;index.bla&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/orders/index.blade.php&#10;products.bla&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/admin/editProducts.blade.php&#10;user.php&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/User.php&#10;cartcont&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Cart/CartController.php&#10;categorycontr&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Category/CategoryController.php&#10;category.bla&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/categories/category.blade.php&#10;categories.bla&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/admin/editCategories.blade.php&#10;product&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Product.php&#10;cart&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Cart.php&#10;product.bla&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/products/product.blade.php&#10;produc&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Product.php&#10;migrations&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/database/migrations&#10;ordercon&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Order/OrderController.php&#10;cartcon&#9;null&#9;null&#10;migration&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/database/migrations&#10;productcont&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Product/ProductController.php&#10;.blade&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/resources/views/products/product.blade.php&#10;migra&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/database/migrations&#10;prod&#9;FILE&#9;file://D:/Projects/laravel-projects/tweety/app/Http/Controllers/Product/ProductController.php" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="jsx.switch.disabled" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../bug-reports" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -462,7 +461,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="535163000" />
+    <option name="totallyTimeSpent" value="535176000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="32" width="1936" height="1056" extended-state="6" />
@@ -484,12 +483,26 @@
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="TypeScript" order="13" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" order="1" show_stripe_button="false" />
+      <window_info id="npm" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.2125" />
+      <window_info id="Structure" order="3" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="12" />
+      <window_info anchor="bottom" id="Version Control" order="5" />
+      <window_info anchor="bottom" id="Run" order="8" weight="0.30643404" />
       <window_info anchor="bottom" id="Inspection Results" order="0" weight="0.3293348" />
+      <window_info anchor="bottom" id="Database Changes" order="2" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="0" />
       <window_info anchor="bottom" id="Message" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
+      <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="4" />
+      <window_info id="Favorites" order="0" side_tool="true" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -753,9 +766,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
-          <folding>
-            <element signature="e#7#56#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -827,7 +837,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/products/product.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1575">
+        <state relative-caret-position="1500">
           <caret line="63" column="41" selection-start-line="63" selection-start-column="41" selection-end-line="63" selection-end-column="41" />
         </state>
       </provider>
@@ -855,15 +865,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/admin/editCategories.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="147" column="85" lean-forward="true" selection-start-line="147" selection-start-column="85" selection-end-line="147" selection-end-column="85" />
+        <state relative-caret-position="657">
+          <caret line="157" selection-start-line="157" selection-end-line="157" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/js/custom.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
-          <caret line="305" column="5" lean-forward="true" selection-start-line="305" selection-start-column="5" selection-end-line="305" selection-end-column="5" />
+          <caret line="305" column="5" selection-start-line="305" selection-start-column="5" selection-end-line="305" selection-end-column="5" />
         </state>
       </provider>
     </entry>
